@@ -1224,3 +1224,702 @@ int main() {
     return 0;
 }
 -------------------------------------------------
+pointers:
+Write a program that initializes two arrays of pointers. Then, by using pointers, interchange the elements of the arrays (Don't use [] anywhere in the program).
+ChatGPT said:
+ChatGPT
+Here’s a program that initializes two arrays of pointers and interchanges their elements using only pointers (no [] operator is used):
+
+Steps:
+Initialize two arrays as arrays of pointers.
+Use pointer arithmetic to access and interchange the elements.
+Swap the elements by dereferencing the pointers.
+Code:
+c
+Copy code
+#include <stdio.h>
+
+void interchange(int *arr1[], int *arr2[], int size) {
+    for (int i = 0; i < size; i++) {
+        int *temp = *(arr1 + i); // Access element of arr1 using pointer arithmetic
+        *(arr1 + i) = *(arr2 + i); // Swap element of arr1 with arr2
+        *(arr2 + i) = temp; // Assign temp to arr2
+    }
+}
+
+int main() {
+    int a = 1, b = 2, c = 3, d = 4, e = 5; // Example values
+    int f = 6, g = 7, h = 8, i = 9, j = 10;
+
+    // Initialize arrays of pointers
+    int *arr1[] = {&a, &b, &c, &d, &e};
+    int *arr2[] = {&f, &g, &h, &i, &j};
+
+    // Print arrays before interchanging
+    printf("Before interchanging:\n");
+    printf("Array 1: ");
+    for (int k = 0; k < 5; k++) {
+        printf("%d ", **(arr1 + k)); // Access element using pointer arithmetic
+    }
+    printf("\nArray 2: ");
+    for (int k = 0; k < 5; k++) {
+        printf("%d ", **(arr2 + k)); // Access element using pointer arithmetic
+    }
+    printf("\n");
+
+    // Interchange elements of the arrays
+    interchange(arr1, arr2, 5);
+
+    // Print arrays after interchanging
+    printf("\nAfter interchanging:\n");
+    printf("Array 1: ");
+    for (int k = 0; k < 5; k++) {
+        printf("%d ", **(arr1 + k));
+    }
+    printf("\nArray 2: ");
+    for (int k = 0; k < 5; k++) {
+        printf("%d ", **(arr2 + k));
+    }
+    printf("\n");
+
+    return 0;
+}
+----------------------------------------------
+Write a program to allocate memory dynamically for n integers such that the memory is initialized to 0. Accept the data from the user and find the range of the data elements.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n, i;
+    int *arr;
+    int min, max, range;
+
+    // Accept the number of elements
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+
+    // Dynamically allocate memory and initialize it to 0
+    arr = (int *)calloc(n, sizeof(int));
+    if (arr == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1; // Exit if memory allocation fails
+    }
+
+    // Accept data from the user
+    printf("Enter %d integers:\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", arr + i); // Store the value at dynamically allocated memory
+    }
+
+    // Find the minimum and maximum values
+    min = max = arr[0]; // Initialize min and max with the first element
+    for (i = 1; i < n; i++) {
+        if (*(arr + i) < min) {
+            min = *(arr + i); // Update minimum
+        }
+        if (*(arr + i) > max) {
+            max = *(arr + i); // Update maximum
+        }
+    }
+
+    // Calculate the range
+    range = max - min;
+
+    // Display the range
+    
+    printf("The range of the data elements is: %d\n", range);
+
+    // Free the allocated memory
+    free(arr);
+
+    return 0;
+}
+-------------------------------------------------------;
+Accept n integers in array A. Pass this array and two counter variables to a function, which will set the first counter to the total number of even values in the array and the other to the total number of odd values
+
+#include <stdio.h>
+
+// Function to count even and odd numbers
+void countEvenOdd(int arr[], int n, int *evenCount, int *oddCount) {
+    int i;
+    *evenCount = 0; // Initialize even count
+    *oddCount = 0;  // Initialize odd count
+
+    for (i = 0; i < n; i++) {
+        if (arr[i] % 2 == 0) {
+            (*evenCount)++; // Increment even count
+        } else {
+            (*oddCount)++;  // Increment odd count
+        }
+    }
+}
+
+int main() {
+    int n, i;
+    int evenCount, oddCount;
+
+    // Accept the size of the array
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+
+    int arr[n]; // Declare the array
+
+    // Accept the elements of the array
+    printf("Enter %d integers:\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Call the function to count even and odd numbers
+    countEvenOdd(arr, n, &evenCount, &oddCount);
+
+    // Display the counts
+    printf("Total even numbers: %d\n", evenCount);
+    printf("Total odd numbers: %d\n", oddCount);
+
+    return 0;
+}
+=========================================================
+Write a function that accepts a number and three flags as parameters. If the number is even, set the first flag to 1. If the number is prime, set the second flag to 1. If the number is divisible by 3 or 7, set the third flag to 1. In main, accept an integer and use this function to check if it is even, prime, and divisible by 3 or 7. (Hint: pass the addresses of the flags to the function)
+
+#include <stdio.h>
+#include <math.h>
+
+// Function to check conditions on the number
+void checkNumber(int num, int *isEven, int *isPrime, int *isDivBy3or7) {
+    // Check if the number is even
+    *isEven = (num % 2 == 0) ? 1 : 0;
+
+    // Check if the number is prime
+    if (num < 2) {
+        *isPrime = 0;
+    } else {
+        *isPrime = 1;
+        for (int i = 2; i <= sqrt(num); i++) {
+            if (num % i == 0) {
+                *isPrime = 0;
+                break;
+            }
+        }
+    }
+
+    // Check if the number is divisible by 3 or 7
+    *isDivBy3or7 = (num % 3 == 0 || num % 7 == 0) ? 1 : 0;
+}
+
+int main() {
+    int num;
+    int isEven = 0, isPrime = 0, isDivBy3or7 = 0;
+
+    // Accept the number from the user
+    printf("Enter an integer: ");
+    scanf("%d", &num);
+
+    // Call the function with the number and flag addresses
+    checkNumber(num, &isEven, &isPrime, &isDivBy3or7);
+
+    // Display the results
+    printf("Results for the number %d:\n", num);
+    printf("Is Even: %d\n", isEven);
+    printf("Is Prime: %d\n", isPrime);
+    printf("Is Divisible by 3 or 7: %d\n", isDivBy3or7);
+
+    return 0;
+}
+----------------------------------------
+
+Accept the number of rows (m) and columns (n) for a matrix and dynamically allocate memory for the matrix. Accept and display the matrix using pointers. (Hint: Use an array of pointers)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int m, n, i, j;
+    int **matrix;
+
+    // Accept the number of rows and columns
+    printf("Enter the number of rows (m): ");
+    scanf("%d", &m);
+    printf("Enter the number of columns (n): ");
+    scanf("%d", &n);
+
+    // Dynamically allocate memory for the matrix (array of pointers)
+    matrix = (int **)malloc(m * sizeof(int *));
+    if (matrix == NULL) {
+        printf("Memory allocation failed for rows.\n");
+        return 1;
+    }
+
+    // Allocate memory for each row
+    for (i = 0; i < m; i++) {
+        matrix[i] = (int *)malloc(n * sizeof(int));
+        if (matrix[i] == NULL) {
+            printf("Memory allocation failed for row %d.\n", i + 1);
+            return 1;
+        }
+    }
+
+    // Accept the elements of the matrix
+    printf("Enter the elements of the matrix:\n");
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            printf("Element [%d][%d]: ", i + 1, j + 1);
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    // Display the matrix
+    printf("The matrix is:\n");
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            printf("%d ", *(*(matrix + i) + j));
+        }
+        printf("\n");
+    }
+
+    // Free the dynamically allocated memory
+    for (i = 0; i < m; i++) {
+        free(matrix[i]);
+    }
+    free(matrix);
+
+    return 0;
+}
+---------------------------------
+string:
+Write a program to accept the string and select one character from user which is may/may not be in that string. If it is present in the string deletes that character from the given string. Print the number of occurrences of that character and the remaining string. (Use array/pointer and accept string from user). Example: "I'm fine, how r u?" char *h; o/p="I'm fine, ow r u?"
+#include <stdio.h>
+#include <string.h>
+
+void removeCharacter(char *str, char ch) {
+    char *src = str, *dest = str; // Pointers for traversal
+    int count = 0;               // Counter for occurrences of the character
+
+    // Traverse through the string
+    while (*src != '\0') {
+        if (*src != ch) {
+            *dest = *src; // Copy the character if it's not the one to be removed
+            dest++;
+        } else {
+            count++; // Increment count if the character matches
+        }
+        src++;
+    }
+
+    *dest = '\0'; // Null-terminate the resulting string
+
+    // Print results
+    printf("Number of occurrences of '%c': %d\n", ch, count);
+    printf("Updated string: \"%s\"\n", str);
+}
+
+int main() {
+    char str[100], ch;
+
+    // Accept the string from the user
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+
+    // Remove trailing newline if present
+    size_t len = strlen(str);
+    if (len > 0 && str[len - 1] == '\n') {
+        str[len - 1] = '\0';
+    }
+
+    // Accept the character to be removed
+    printf("Enter the character to remove: ");
+    scanf("%c", &ch);
+
+    // Call the function to remove the character
+    removeCharacter(str, ch);
+
+    return 0;
+}
+--------------------------------------------
+Write a program that accepts a sentence and splits the sentence into words. Sort each word and reconstruct the sentence. Input – this is a string Output – hist is a ginrst
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Function to sort characters of a word
+void sortWord(char *word) {
+    int len = strlen(word);
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++) {
+            if (word[i] > word[j]) {
+                // Swap characters if out of order
+                char temp = word[i];
+                word[i] = word[j];
+                word[j] = temp;
+            }
+        }
+    }
+}
+
+// Function to split, sort, and reconstruct the sentence
+void processSentence(char *sentence) {
+    char *word = strtok(sentence, " "); // Split sentence into words
+    char result[1000] = ""; // To store the reconstructed sentence
+
+    while (word != NULL) {
+        sortWord(word);               // Sort the current word
+        strcat(result, word);         // Append sorted word to result
+        strcat(result, " ");          // Add a space after the word
+        word = strtok(NULL, " ");     // Move to the next word
+    }
+
+    // Remove the trailing space from the result
+    result[strlen(result) - 1] = '\0';
+
+    printf("Reconstructed sentence: %s\n", result);
+}
+
+int main() {
+    char sentence[1000];
+
+    // Accept the input sentence
+    printf("Enter a sentence: ");
+    fgets(sentence, sizeof(sentence), stdin);
+
+    // Remove trailing newline if present
+    size_t len = strlen(sentence);
+    if (len > 0 && sentence[len - 1] == '\n') {
+        sentence[len - 1] = '\0';
+    }
+
+    // Process the sentence
+    processSentence(sentence);
+
+    return 0;
+}
+-----------------------------------------------
+Write a C program that will replace a substring of a given string by another string of length less than (or might be equal to) the length of the existing substring. Use pointers for this operation.
+#include <stdio.h>
+#include <string.h>
+
+// Function to replace a substring with another string
+void replaceSubstring(char *str, const char *oldSub, const char *newSub) {
+    char result[1000]; // Temporary result string
+    char *pos = str;   // Pointer to the current position in the string
+    char *found;       // Pointer to the found substring
+
+    int oldLen = strlen(oldSub);
+    int newLen = strlen(newSub);
+    int index = 0;
+
+    result[0] = '\0'; // Initialize result as an empty string
+
+    while ((found = strstr(pos, oldSub)) != NULL) { // Locate substring
+        // Copy characters before the substring
+        while (pos < found) {
+            result[index++] = *pos++;
+        }
+
+        // Copy the replacement string
+        for (int i = 0; i < newLen; i++) {
+            result[index++] = newSub[i];
+        }
+
+        // Move past the old substring
+        pos += oldLen;
+    }
+
+    // Copy the remaining part of the string
+    while (*pos != '\0') {
+        result[index++] = *pos++;
+    }
+
+    result[index] = '\0'; // Null-terminate the result
+
+    // Copy result back to the original string
+    strcpy(str, result);
+}
+
+int main() {
+    char str[1000], oldSub[100], newSub[100];
+
+    // Accept the original string
+    printf("Enter the original string: ");
+    fgets(str, sizeof(str), stdin);
+    str[strcspn(str, "\n")] = '\0'; // Remove trailing newline
+
+    // Accept the substring to replace
+    printf("Enter the substring to replace: ");
+    fgets(oldSub, sizeof(oldSub), stdin);
+    oldSub[strcspn(oldSub, "\n")] = '\0'; // Remove trailing newline
+
+    // Accept the replacement string
+    printf("Enter the replacement string: ");
+    fgets(newSub, sizeof(newSub), stdin);
+    newSub[strcspn(newSub, "\n")] = '\0'; // Remove trailing newline
+
+    // Perform the replacement
+    replaceSubstring(str, oldSub, newSub);
+
+    // Display the modified string
+    printf("Modified string: %s\n", str);
+
+    return 0;
+}
+-------------------------------------------
+Write a program which accepts a string and checks whether it is palindrome or not. Example: input: madam output: Given string is palindrome
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to check if a string is a palindrome
+int isPalindrome(const char *str) {
+    const char *start = str;                  // Pointer to the start of the string
+    const char *end = str + strlen(str) - 1;  // Pointer to the end of the string
+
+    while (start < end) {
+        if (*start != *end) {
+            return 0; // Return false if characters don't match
+        }
+        start++;
+        end--;
+    }
+    return 1; // Return true if the entire string is checked
+}
+
+int main() {
+    char str[1000];
+
+    // Accept the input string
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+
+    // Remove trailing newline character
+    str[strcspn(str, "\n")] = '\0';
+
+    // Check if the string is a palindrome
+    if (isPalindrome(str)) {
+        printf("Given string is a palindrome.\n");
+    } else {
+        printf("Given string is not a palindrome.\n");
+    }
+
+    return 0;
+}
+-----------------------------------------------------
+Write a program that accepts names of n cities and write functions for the following: a. Search for a city b. Displays the longest string c. Sorts the names
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Function to search for a city
+int searchCity(char cities[][100], int n, const char *cityName) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(cities[i], cityName) == 0) {
+            return i; // Return index if city is found
+        }
+    }
+    return -1; // Return -1 if city is not found
+}
+
+// Function to find and display the longest city name
+void displayLongestCity(char cities[][100], int n) {
+    int maxLength = 0;
+    int longestIndex = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (strlen(cities[i]) > maxLength) {
+            maxLength = strlen(cities[i]);
+            longestIndex = i;
+        }
+    }
+
+    printf("The longest city name is: %s\n", cities[longestIndex]);
+}
+
+// Function to sort city names alphabetically
+void sortCities(char cities[][100], int n) {
+    char temp[100];
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (strcmp(cities[i], cities[j]) > 0) {
+                // Swap cities[i] and cities[j]
+                strcpy(temp, cities[i]);
+                strcpy(cities[i], cities[j]);
+                strcpy(cities[j], temp);
+            }
+        }
+    }
+}
+
+// Main function
+int main() {
+    int n;
+
+    // Accept the number of cities
+    printf("Enter the number of cities: ");
+    scanf("%d", &n);
+    getchar();  // Consume the newline character left by scanf
+
+    char cities[n][100];  // Array to store city names
+
+    // Accept the names of the cities
+    printf("Enter the names of %d cities:\n", n);
+    for (int i = 0; i < n; i++) {
+        fgets(cities[i], sizeof(cities[i]), stdin);
+        cities[i][strcspn(cities[i], "\n")] = '\0'; // Remove newline character
+    }
+
+    // Search for a city
+    char search[100];
+    printf("Enter the city name to search: ");
+    fgets(search, sizeof(search), stdin);
+    search[strcspn(search, "\n")] = '\0'; // Remove newline character
+
+    int index = searchCity(cities, n, search);
+    if (index != -1) {
+        printf("City '%s' found at index %d.\n", search, index);
+    } else {
+        printf("City '%s' not found.\n", search);
+    }
+
+    // Display the longest city name
+    displayLongestCity(cities, n);
+
+    // Sort the cities and display the sorted list
+    sortCities(cities, n);
+    printf("Cities sorted in alphabetical order:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", cities[i]);
+    }
+
+    return 0;
+}
+------------------------------------------------
+Write a menu-driven program which performs the following operations on strings. Write a separate function for each option. Use pointers: i. Copy one string to another ii. Concatenate two strings iii. Count number of occurrences of a character in the string. iv. Replace all occurrences of a character by another
+
+#include <stdio.h>
+#include <string.h>
+
+// Function to copy one string to another
+void copyString(char *source, char *destination) {
+    while (*source != '\0') {
+        *destination = *source;
+        source++;
+        destination++;
+    }
+    *destination = '\0'; // Null-terminate the destination string
+}
+
+// Function to concatenate two strings
+void concatenateStrings(char *str1, char *str2, char *result) {
+    while (*str1 != '\0') { // Copy first string to result
+        *result = *str1;
+        result++;
+        str1++;
+    }
+    while (*str2 != '\0') { // Copy second string to result
+        *result = *str2;
+        result++;
+        str2++;
+    }
+    *result = '\0'; // Null-terminate the result string
+}
+
+// Function to count the occurrences of a character in a string
+int countOccurrences(char *str, char ch) {
+    int count = 0;
+    while (*str != '\0') {
+        if (*str == ch) {
+            count++;
+        }
+        str++;
+    }
+    return count;
+}
+
+// Function to replace all occurrences of a character with another
+void replaceCharacter(char *str, char oldChar, char newChar) {
+    while (*str != '\0') {
+        if (*str == oldChar) {
+            *str = newChar;
+        }
+        str++;
+    }
+}
+
+int main() {
+    char str1[100], str2[100], result[200];
+    char ch, oldChar, newChar;
+    int choice, count;
+
+    // Accept input strings
+    printf("Enter the first string: ");
+    fgets(str1, sizeof(str1), stdin);
+    str1[strcspn(str1, "\n")] = '\0'; // Remove newline character
+
+    printf("Enter the second string: ");
+    fgets(str2, sizeof(str2), stdin);
+    str2[strcspn(str2, "\n")] = '\0'; // Remove newline character
+
+    do {
+        // Display menu
+        printf("\nMenu:\n");
+        printf("1. Copy one string to another\n");
+        printf("2. Concatenate two strings\n");
+        printf("3. Count number of occurrences of a character in a string\n");
+        printf("4. Replace all occurrences of a character by another\n");
+        printf("5. Exit\n");
+
+        // Accept user choice
+        printf("Enter your choice (1-5): ");
+        scanf("%d", &choice);
+        getchar(); // Consume the newline character left by scanf
+
+        switch (choice) {
+            case 1:
+                // Copy str1 to str2
+                copyString(str1, str2);
+                printf("String after copy: %s\n", str2);
+                break;
+
+            case 2:
+                // Concatenate str1 and str2
+                concatenateStrings(str1, str2, result);
+                printf("Concatenated string: %s\n", result);
+                break;
+
+            case 3:
+                // Count occurrences of a character in str1
+                printf("Enter the character to count occurrences: ");
+                scanf("%c", &ch);
+                getchar(); // Consume the newline character
+                count = countOccurrences(str1, ch);
+                printf("Character '%c' occurred %d times in the string.\n", ch, count);
+                break;
+
+            case 4:
+                // Replace all occurrences of a character by another
+                printf("Enter the character to replace: ");
+                scanf("%c", &oldChar);
+                getchar(); // Consume the newline character
+                printf("Enter the new character: ");
+                scanf("%c", &newChar);
+                getchar(); // Consume the newline character
+                replaceCharacter(str1, oldChar, newChar);
+                printf("String after replacement: %s\n", str1);
+                break;
+
+            case 5:
+                // Exit
+                printf("Exiting program...\n");
+                break;
+
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
